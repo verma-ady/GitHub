@@ -22,10 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -109,13 +106,10 @@ public class MainActivity extends AppCompatActivity {
                 stringJSON = buffer.toString();
                 Log.v(LOG_CAT, stringJSON );
                 return stringJSON;
-            } catch (ConnectException | ProtocolException | MalformedURLException e) {
-                error= "null_file";
-                e.printStackTrace();
             } catch (UnknownHostException e) {
-                error = "null_internt" ;
+                error = "null_internet" ;
                 e.printStackTrace();
-            } catch (IOException e ) {
+            } catch (IOException e) {
                 error= "null_file";
                 e.printStackTrace();
             } finally {
