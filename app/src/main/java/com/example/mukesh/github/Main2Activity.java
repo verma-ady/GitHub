@@ -9,8 +9,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,29 +25,60 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class Main2Activity extends AppCompatActivity {
 
+    ArrayList<String> repoList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
 
-        Log.v("Main", "oncreate");
+        Intent intent = getIntent();
 
-//        Fragment frag = (Fragment) getFragmentManager().findFragmentById(R.layout.fragment_home);
+        if( intent!=null && intent.hasExtra(Intent.EXTRA_TEXT)){
+            String strJSON = intent.getStringExtra(Intent.EXTRA_TEXT);
+            Log.v("Main2Activity", strJSON );
+            try {
+                Log.v("JSONARRAY", strJSON);
+//                JSONObject JSON = new JSONObject(strJSON);
+                JSONArray JSON = new JSONArray(strJSON);
+
+                int num = JSON.length();
+                repoList.clear();
+                for ( int i=0; i<num ; i++ ){
+                    JSONObject repoJSON = JSON.getJSONObject(i);
+                    String repoName, repoDesc;
+                    repoName = repoJSON.getString("name");
+                    repoDesc = repoJSON.getString("description");
+                    repoList.add(repoName );
+                    Log.v("JSONString", repoName + repoDesc );
+                }
+            } catch (JSONException e) {
+//                Toast
+                e.printStackTrace();
+            }
+        }
+
+        ListView lv = (ListView) findViewById(R.id.repolistView);
+        ArrayAdapter<String> arrayAdapter = (ArrayAdapter<String>)  lv.getAdapter();
+        arrayAdapter.clear();
+        arrayAdapter.addAll(repoList);
+        lv.setAdapter((ArrayAdapter<String>)arrayAdapter);
+
     }
 
 
-    public void onsearch( View v ){
-        Log.v("Main", "onclick");
-        EditText ed= (EditText)findViewById(R.id.search);
-        if(ed.getText().length() == 0 ){
-            Toast.makeText(getApplicationContext(), "Please Enter User ID", Toast.LENGTH_SHORT ).show();
+    public void onsearch2( View v ){
+        Log.v("Main2", "onclick");
+        EditText ed2= (EditText)findViewById(R.id.search2);
+        if(ed2.getText().length() == 0 ){
+            Toast.makeText(getApplicationContext(), "Please Enter User ID", Toast.LENGTH_SHORT).show();
         }
 
         else {
-            String value = ed.getText().toString();
+            String value = ed2.getText().toString();
             getRepo gt = new getRepo();
             gt.execute(value);
 
@@ -137,16 +174,38 @@ public class MainActivity extends AppCompatActivity {
                 return ;
             }
 
-            Intent intent = new Intent ( MainActivity.this, Main2Activity.class).putExtra(Intent.EXTRA_TEXT, strJSON );
-            startActivity(intent);
+            try {
+                Log.v("JSONARRAY", strJSON);
+//                JSONObject JSON = new JSONObject(strJSON);
+                JSONArray JSON = new JSONArray(strJSON);
 
+                int num = JSON.length();
+                repoList.clear();
+                for ( int i=0; i<num ; i++ ){
+                    JSONObject repoJSON = JSON.getJSONObject(i);
+                    String repoName, repoDesc;
+                    repoName = repoJSON.getString("name");
+                    repoDesc = repoJSON.getString("description");
+                    repoList.add(repoName );
+                    Log.v("JSONString", repoName + repoDesc );
+                }
+            } catch (JSONException e) {
+//                Toast
+                e.printStackTrace();
+            }
+
+            ListView lv = (ListView) findViewById(R.id.repolistView);
+            ArrayAdapter<String> arrayAdapter = (ArrayAdapter<String>)  lv.getAdapter();
+            arrayAdapter.clear();
+            arrayAdapter.addAll(repoList);
+            lv.setAdapter((ArrayAdapter<String>)arrayAdapter);
         }
     }//getrepo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main2, menu);
         return true;
     }
 

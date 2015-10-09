@@ -41,7 +41,8 @@ public class userrepo extends Fragment {
 //     * @return A new instance of fragment userrepo.
 //     */
 //    // TODO: Rename and change types and number of parameters
-//    public static userrepo newInstance(String param1, String param2) {
+//    public static userrepo newInstance(ArrayList<String> list ) {
+
 //        userrepo fragment = new userrepo();
 //        Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, param1);
@@ -66,7 +67,7 @@ public class userrepo extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_userrepo, container, false);
 
-        String res[] = {"ABC", "DEF", "GHI"};
+        String res[] = {"  "};
 
         ArrayList<String> arlist = new ArrayList<>(Arrays.asList(res));
 
@@ -77,6 +78,11 @@ public class userrepo extends Fragment {
 
         return  root;
     }
+
+//    public void setAdapter ( ArrayList<String> lvList ){
+//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment_userrepo, R.id.repolist, lvList );
+//        ListView lv =
+//    }
 
 //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
@@ -89,8 +95,9 @@ public class userrepo extends Fragment {
 //    public void onAttach(Activity activity) {
 //        super.onAttach(activity);
 //        try {
-//            mListener = (OnFragmentInteractionListener) activity;
+//            Log.v("UserReop", "onattach");
 //        } catch (ClassCastException e) {
+//            Log.v("UserReop", "onattacherror");
 //            throw new ClassCastException(activity.toString()
 //                    + " must implement OnFragmentInteractionListener");
 //        }

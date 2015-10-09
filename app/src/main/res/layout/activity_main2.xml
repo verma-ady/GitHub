@@ -8,12 +8,12 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:id="@+id/linear"
+        android:id="@+id/linear2"
         android:layout_width="match_parent"
         android:layout_height="50dp" >
 
         <EditText
-            android:id="@+id/search"
+            android:id="@+id/search2"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:paddingTop="5dp"
@@ -23,24 +23,24 @@
             android:hint="Enter ID"/>
 
         <Button
-            android:id="@+id/search_button"
+            android:id="@+id/search_button2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Search"
             android:paddingTop="5dp"
             android:paddingBottom="7dp"
             android:clickable="true"
-            android:onClick="onsearch" />
+            android:onClick="onsearch2" />
     </LinearLayout>
 
 
     <fragment
         android:layout_height="fill_parent"
         android:layout_width="match_parent"
-        android:id="@+id/fragment"
+        android:id="@+id/fragment2"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/linear"
-        android:name="com.example.mukesh.github.home"
+        android:layout_below="@+id/linear2"
+        android:name="com.example.mukesh.github.userrepo"
         >
     </fragment>
 
