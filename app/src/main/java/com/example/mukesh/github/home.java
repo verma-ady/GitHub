@@ -1,12 +1,14 @@
 package com.example.mukesh.github;
 
 import android.app.Fragment;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +57,8 @@ public class home extends Fragment {
         // Required empty public constructor
     }
 
+    database d;
+    View root;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,21 +69,42 @@ public class home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-
-        String res[] = {" ABC "};
-
-        ArrayList<String> arlist = new ArrayList<>(Arrays.asList(res));
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment_home, R.id.followlist, arlist );
-
-        ListView lv = (ListView) root.findViewById(R.id.followlistView);
-        lv.setAdapter(arrayAdapter);
-
+        root = inflater.inflate(R.layout.fragment_home, container, false);
+        d=new database(getActivity());
+        showlist();
         return  root;
     }
-//
-//    // TODO: Rename method, update argument and hook method into UI event
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        showlist();
+    }
+
+    public void showlist(){
+
+        Cursor dbres = d.onShow() ;
+
+        int cnt = dbres.getCount();
+        int i=0;
+        String res[] = new String[cnt];
+
+
+        if( cnt!=0 ) {
+            while(dbres.moveToNext()){
+                res[i++]=dbres.getString(1);
+            }
+            ArrayList<String> arlist = new ArrayList<>(Arrays.asList(res));
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment_home, R.id.followlist, arlist);
+
+            ListView lv = (ListView) root.findViewById(R.id.followlistView);
+            lv.setAdapter(arrayAdapter);
+        }
+        else {
+            Toast.makeText(getActivity(), "Followed List Empty ", Toast.LENGTH_SHORT).show();
+        }
+    }
+    //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {
 //            mListener.onFragmentInteraction(uri);

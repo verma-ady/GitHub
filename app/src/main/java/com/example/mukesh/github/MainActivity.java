@@ -22,16 +22,23 @@ import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
 
+    database b;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        b = new database ( getApplicationContext());
         Log.v("Main", "oncreate");
 
 //        Fragment frag = (Fragment) getFragmentManager().findFragmentById(R.layout.fragment_home);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        b.close();
+    }
 
     public void onsearch( View v ){
         Log.v("Main", "onclick");
@@ -47,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
 
     public class getRepo extends AsyncTask<String, Void, String > {
 

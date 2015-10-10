@@ -1,6 +1,7 @@
 package com.example.mukesh.github;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,11 +31,13 @@ import java.util.ArrayList;
 public class Main2Activity extends AppCompatActivity {
 
     ArrayList<String> repoList = new ArrayList<>();
+    database d;
+    String isvalid= "Wait";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-
+        d=new database(getApplicationContext());
         Intent intent = getIntent();
 
         if( intent!=null && intent.hasExtra(Intent.EXTRA_TEXT)){
@@ -50,6 +53,7 @@ public class Main2Activity extends AppCompatActivity {
                 for ( int i=0; i<num ; i++ ){
                     JSONObject repoJSON = JSON.getJSONObject(i);
                     String repoName, repoDesc;
+                    isvalid=repoJSON.getJSONObject("owner").getString("login");
                     repoName = repoJSON.getString("name");
                     repoDesc = repoJSON.getString("description");
                     repoList.add(repoName );
@@ -71,7 +75,7 @@ public class Main2Activity extends AppCompatActivity {
 
 
     public void onsearch2( View v ){
-        Log.v("Main2", "onclick");
+        Log.v("Main2", "onearch");
         EditText ed2= (EditText)findViewById(R.id.search2);
         if(ed2.getText().length() == 0 ){
             Toast.makeText(getApplicationContext(), "Please Enter User ID", Toast.LENGTH_SHORT).show();
@@ -82,6 +86,52 @@ public class Main2Activity extends AppCompatActivity {
             getRepo gt = new getRepo();
             gt.execute(value);
 
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        d=new database(getApplicationContext());
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        d.close();
+        super.onPause();
+    }
+
+    public void addtodb( View v ){
+
+        EditText ed = (EditText)findViewById(R.id.search2);
+
+        try {
+            Log.v("Follow_func", isvalid + "" + ed.getText().toString());
+            if (isvalid == ed.getText().toString()) {
+                if (d.onAdd(isvalid) == true) {
+                    Toast.makeText(getApplicationContext(), isvalid + " successfully followed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), " Failed to follow " + isvalid, Toast.LENGTH_SHORT).show();
+                }
+                isvalid = "Wait";
+            } else if (isvalid == "Wait") {
+                Toast.makeText(getApplicationContext(), "Unable to fetch user data", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (isvalid == "null_inputstream" || isvalid == "null_file") {
+                Toast.makeText(getApplicationContext(), "No Such User Id Found", Toast.LENGTH_SHORT).show();
+                isvalid = "Wait";
+                return;
+            } else if (isvalid == "null_internet") {
+                Toast.makeText(getApplicationContext(), "No Internet Connectivity", Toast.LENGTH_SHORT).show();
+                isvalid = "Wait";
+                return;
+            } else {
+                Toast.makeText(getApplicationContext(), "Press Search Button to search before Following", Toast.LENGTH_SHORT).show();
+                isvalid = "Wait";
+            }
+
+        } catch ( SQLiteConstraintException e ){
+            e.printStackTrace();
         }
     }
 
@@ -162,8 +212,8 @@ public class Main2Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String strJSON) {
-
-
+        isvalid=strJSON;
+        Log.v("Follow", isvalid);
             if( strJSON=="null_inputstream" || strJSON=="null_file" ){
                 Toast.makeText(getApplicationContext(), "No Such User Id Found", Toast.LENGTH_SHORT).show();
                 return  ;
@@ -178,16 +228,16 @@ public class Main2Activity extends AppCompatActivity {
                 Log.v("JSONARRAY", strJSON);
 //                JSONObject JSON = new JSONObject(strJSON);
                 JSONArray JSON = new JSONArray(strJSON);
-
                 int num = JSON.length();
                 repoList.clear();
                 for ( int i=0; i<num ; i++ ){
                     JSONObject repoJSON = JSON.getJSONObject(i);
                     String repoName, repoDesc;
+                    isvalid =repoJSON.getJSONObject("owner").getString("login");
                     repoName = repoJSON.getString("name");
                     repoDesc = repoJSON.getString("description");
                     repoList.add(repoName );
-                    Log.v("JSONString", repoName + repoDesc );
+                    Log.v("JSONString" + isvalid, repoName + repoDesc );
                 }
             } catch (JSONException e) {
 //                Toast
