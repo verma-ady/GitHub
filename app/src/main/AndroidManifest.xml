@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name=".onListClick"
-            android:label="@string/title_activity_on_list_click" >
+            android:label="GitHub" >
         </activity>
     </application>
 

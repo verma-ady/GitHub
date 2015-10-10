@@ -1,6 +1,8 @@
 package com.example.mukesh.github;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +47,7 @@ public class onListClick extends AppCompatActivity {
         private final String LOG_CAT = getuserinfo.class.getSimpleName();
         public String base = "https://api.github.com/users";
         public String JSONSTRING = new String();
-        public String mail, name, company, location, text_data;
+        public String mail, name, company, location, text_data, img_url;
         public Long id, follower, following, repos;
 
         @Override
@@ -121,6 +124,7 @@ public class onListClick extends AppCompatActivity {
                 company=JSON.getString("company");
                 location=JSON.getString("location");
                 repos=JSON.getLong("public_repos");
+                img_url=JSON.getString("avatar_url");
 //                Bitmap bitmap =
                 Log.v("Onclick", id.toString()+" "+follower.toString()+" "+following.toString()+" "+mail+" "+name+" "+company+" "+location );
             } catch ( JSONException e ){
@@ -152,13 +156,49 @@ public class onListClick extends AppCompatActivity {
             strData.append("Following     : " + following.toString() + "\n");
 
             text_data= strData.toString();
-            Log.v("Onpost", text_data );
+            Log.v("Onpost", text_data);
             data.setText(text_data);
+
+            getbitmap gb = new getbitmap();
+            gb.execute(img_url);
 
         }//onpost
 
     }//class getuserinfo
 
+    public class getbitmap extends AsyncTask<String, Void, Bitmap >{
+
+        public Bitmap myBitmap;
+        public InputStream input = null;
+        HttpURLConnection connection = null;
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            try {
+                URL url = new URL(params[0] );
+                 connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                 input = connection.getInputStream();
+                myBitmap = BitmapFactory.decodeStream(input);
+                Log.e("Bitmap", "returned");
+
+            } catch ( IOException e ){
+                e.printStackTrace();
+            } finally {
+                if( connection!=null ){
+
+                }
+            }
+            return myBitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap b ) {
+            ImageView iv = (ImageView) findViewById(R.id.imageView);
+            iv.setImageBitmap(b);
+            super.onPostExecute(b);
+        }
+    }//getbitmap
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
