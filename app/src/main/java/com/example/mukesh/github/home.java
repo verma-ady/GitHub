@@ -1,11 +1,13 @@
 package com.example.mukesh.github;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -59,11 +61,13 @@ public class home extends Fragment {
 
     database d;
     View root;
+    ListView lv;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,7 +75,19 @@ public class home extends Fragment {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_home, container, false);
         d=new database(getActivity());
+        lv = (ListView) root.findViewById(R.id.followlistView);
         showlist();
+
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = (String) parent.getItemAtPosition(position);
+                Intent intent = new Intent(getActivity(), onListClick.class).putExtra(Intent.EXTRA_TEXT, name);
+                startActivity(intent);
+            }
+        });
+
         return  root;
     }
 
@@ -96,8 +112,6 @@ public class home extends Fragment {
             }
             ArrayList<String> arlist = new ArrayList<>(Arrays.asList(res));
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment_home, R.id.followlist, arlist);
-
-            ListView lv = (ListView) root.findViewById(R.id.followlistView);
             lv.setAdapter(arrayAdapter);
         }
         else {

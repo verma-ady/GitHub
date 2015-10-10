@@ -32,6 +32,10 @@
             android:name=".Main2Activity"
             android:label="GitHub" >
         </activity>
+        <activity
+            android:name=".onListClick"
+            android:label="@string/title_activity_on_list_click" >
+        </activity>
     </application>
 
 </manifest>
