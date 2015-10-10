@@ -104,17 +104,17 @@ public class Main2Activity extends AppCompatActivity {
     public void addtodb( View v ){
 
         EditText ed = (EditText)findViewById(R.id.search2);
-
+        String input = ed.getText().toString();
         try {
-            Log.v("Follow_func", isvalid + "" + ed.getText().toString());
-            if (isvalid == ed.getText().toString()) {
-                if (d.onAdd(isvalid) == true) {
+            Log.v("Follow_func", isvalid + "" + input);
+            if (isvalid.equals(input)){
+                if (d.onAdd(isvalid)) {
                     Toast.makeText(getApplicationContext(), isvalid + " successfully followed", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), " Failed to follow " + isvalid, Toast.LENGTH_SHORT).show();
                 }
                 isvalid = "Wait";
-            } else if (isvalid == "Wait") {
+            } else if ( isvalid.equals("Wait") ) {
                 Toast.makeText(getApplicationContext(), "Unable to fetch user data", Toast.LENGTH_SHORT).show();
                 return;
             } else if (isvalid == "null_inputstream" || isvalid == "null_file") {
@@ -134,6 +134,7 @@ public class Main2Activity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 
     public class getRepo extends AsyncTask<String, Void, String > {
 
@@ -170,6 +171,7 @@ public class Main2Activity extends AppCompatActivity {
 
                 StringBuffer buffer = new StringBuffer();
                 if(inputStream==null){
+                    isvalid="null_inputstream";
                     return "null_inputstream";
                 }
 
@@ -182,6 +184,7 @@ public class Main2Activity extends AppCompatActivity {
                 }
 
                 if (buffer.length() == 0) {
+                    isvalid="null_inputstream";
                     return "null_inputstream";
                 }
 
@@ -207,12 +210,12 @@ public class Main2Activity extends AppCompatActivity {
                     }
                 }
             }
+            isvalid=error;
             return error;
         }//doinbackground
 
         @Override
         protected void onPostExecute(String strJSON) {
-        isvalid=strJSON;
         Log.v("Follow", isvalid);
             if( strJSON=="null_inputstream" || strJSON=="null_file" ){
                 Toast.makeText(getApplicationContext(), "No Such User Id Found", Toast.LENGTH_SHORT).show();
@@ -223,6 +226,7 @@ public class Main2Activity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "No Internet Connectivity", Toast.LENGTH_SHORT).show();
                 return ;
             }
+
 
             try {
                 Log.v("JSONARRAY", strJSON);
