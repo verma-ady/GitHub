@@ -53,6 +53,18 @@ public class database extends SQLiteOpenHelper {
         return res;
     }
 
+    public boolean isthere( String userid ){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select "+ Col2 + " from " + Table_name + " where (" + Col2 + " = '" + userid + "' )" , null );
+        Log.v( "Database.isthere()" , "select "+ Col2 + " from " + Table_name + " where (" + Col2 + " = '" + userid + "' )");
+
+        if(res.moveToFirst()){
+            return true;
+        }
+
+        else return false;
+    }
+
     public boolean update( String serialno, String userid ){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

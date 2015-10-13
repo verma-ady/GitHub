@@ -75,7 +75,6 @@ public class onListClick extends AppCompatActivity {
         }
     }
 
-
     public class getuserinfo extends AsyncTask<String, Void, String >{
 
         private final String LOG_CAT = getuserinfo.class.getSimpleName();
@@ -251,6 +250,12 @@ public class onListClick extends AppCompatActivity {
     protected void onPause() {
         d.close();
         super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        d.close();
+        super.onStop();
     }
 
     @Override

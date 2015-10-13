@@ -34,17 +34,20 @@ public class Main2Activity extends AppCompatActivity {
     ArrayList<String> repoList = new ArrayList<>();
     database d;
     String isvalid;
+    ImageButton imageButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         d=new database(getApplicationContext());
         Intent intent = getIntent();
-
+        imageButton = (ImageButton) findViewById(R.id.follow_button);
         if( intent!=null && intent.hasExtra(Intent.EXTRA_TEXT)){
             String strJSON = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Log.v("Main2Activity", strJSON );
+            Log.v("Main2Activity", strJSON);
             try {
+
                 Log.v("JSONARRAY", strJSON);
 //                JSONObject JSON = new JSONObject(strJSON);
                 JSONArray JSON = new JSONArray(strJSON);
@@ -53,7 +56,7 @@ public class Main2Activity extends AppCompatActivity {
 
                 repoList.clear();
                 if(num==0){
-                    repoList.add("No repositories for this user");
+                    repoList.add("No Public repositories for this user");
                 }
                 for ( int i=0; i<num ; i++ ){
                     JSONObject repoJSON = JSON.getJSONObject(i);
@@ -63,6 +66,16 @@ public class Main2Activity extends AppCompatActivity {
                     repoDesc = repoJSON.getString("description");
                     repoList.add(repoName );
                     Log.v("JSONString", repoName + repoDesc );
+                }
+
+                if ( d.isthere(isvalid) ){
+                    Log.v("onList.onfollowbutton", "found" );
+                    imageButton.setImageResource(R.drawable.following);
+                    imageButton.setContentDescription("following");
+                } else {
+                    Log.v("onList.onfollowbutton", "not found" );
+                    imageButton.setImageResource(R.drawable.follow);
+                    imageButton.setContentDescription("follow");
                 }
             } catch (JSONException e) {
 //                Toast
@@ -248,6 +261,9 @@ public class Main2Activity extends AppCompatActivity {
                 JSONArray JSON = new JSONArray(strJSON);
                 int num = JSON.length();
                 repoList.clear();
+                if(num==0){
+                    repoList.add("No Public repositories for this user");
+                }
                 for ( int i=0; i<num ; i++ ){
                     JSONObject repoJSON = JSON.getJSONObject(i);
                     String repoName, repoDesc;
