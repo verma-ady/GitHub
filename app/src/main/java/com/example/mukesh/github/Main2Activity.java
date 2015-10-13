@@ -33,19 +33,19 @@ public class Main2Activity extends AppCompatActivity {
 
     ArrayList<String> repoList = new ArrayList<>();
     database d;
-    String isvalid;
+    String isvalid, stringJSON;
     ImageButton imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        Log.v("M2oncreate ", "begins");
         d=new database(getApplicationContext());
         Intent intent = getIntent();
         imageButton = (ImageButton) findViewById(R.id.follow_button);
         if( intent!=null && intent.hasExtra(Intent.EXTRA_TEXT)){
             String strJSON = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Log.v("Main2Activity", strJSON);
             try {
 
                 Log.v("JSONARRAY", strJSON);
@@ -67,8 +67,8 @@ public class Main2Activity extends AppCompatActivity {
                     repoList.add(repoName );
                     Log.v("JSONString", repoName + repoDesc );
                 }
-
-                if ( d.isthere(isvalid) ){
+                boolean b = d.isthere(isvalid);
+                if ( b ){
                     Log.v("onList.onfollowbutton", "found" );
                     imageButton.setImageResource(R.drawable.following);
                     imageButton.setContentDescription("following");
@@ -106,6 +106,8 @@ public class Main2Activity extends AppCompatActivity {
             ed2.setText("");
         }
     }
+
+
 
     @Override
     protected void onResume() {
@@ -215,7 +217,7 @@ public class Main2Activity extends AppCompatActivity {
                     return "null_inputstream";
                 }
 
-                String stringJSON = new String();
+                stringJSON = new String();
                 stringJSON = buffer.toString();
                 Log.v(LOG_CAT, stringJSON );
                 return stringJSON;

@@ -24,7 +24,7 @@ public class database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String execute = "create table " + Table_name + " ( " + Col1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + Col2 + " TEXT UNIQUE );";
-        Log.v("database", execute );
+        Log.v("database", execute);
         db.execSQL(execute);
     }
 
@@ -57,12 +57,10 @@ public class database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select "+ Col2 + " from " + Table_name + " where (" + Col2 + " = '" + userid + "' )" , null );
         Log.v( "Database.isthere()" , "select "+ Col2 + " from " + Table_name + " where (" + Col2 + " = '" + userid + "' )");
-
-        if(res.moveToFirst()){
-            return true;
-        }
-
-        else return false;
+        boolean b = res.moveToFirst();
+        res.close();
+        db.close();
+        return b;
     }
 
     public boolean update( String serialno, String userid ){

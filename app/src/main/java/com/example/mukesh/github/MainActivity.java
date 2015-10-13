@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         b.close();
+        super.onDestroy();
     }
 
     public void onsearch( View v ){
@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
 
     public class getRepo extends AsyncTask<String, Void, String > {
 
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "No Internet Connectivity", Toast.LENGTH_SHORT).show();
                 return ;
             }
-
+            Log.v("MainActivity ", "on post " );
             Intent intent = new Intent ( MainActivity.this, Main2Activity.class).putExtra(Intent.EXTRA_TEXT, strJSON );
             startActivity(intent);
 

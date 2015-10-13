@@ -46,7 +46,8 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll">
+        android:layout_below="@id/ll"
+        android:id="@+id/scrollView">
 
 
         <TextView
@@ -62,22 +63,37 @@
         android:scrollbars="vertical"/>
 
     </ScrollView>
-
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:orientation="horizontal">
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/following_user_info"
-        android:layout_marginBottom="5dp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:src="@drawable/following"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:clickable="true"
-        android:contentDescription="following"
-        android:onClick="onfollowbutton" />
+        android:onClick="onfollowbutton"
+        android:layout_gravity="center_vertical" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_repo"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="View Public Repo"
+        android:clickable="true"
+        android:layout_weight="1"
+        android:onClick="onlistrepo"
+        android:layout_gravity="center_vertical"
+        android:background="#ff8dba" />
+</LinearLayout>
 
 </RelativeLayout>
