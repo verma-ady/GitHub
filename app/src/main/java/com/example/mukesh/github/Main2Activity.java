@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -49,7 +50,11 @@ public class Main2Activity extends AppCompatActivity {
                 JSONArray JSON = new JSONArray(strJSON);
 
                 int num = JSON.length();
+
                 repoList.clear();
+                if(num==0){
+                    repoList.add("No repositories for this user");
+                }
                 for ( int i=0; i<num ; i++ ){
                     JSONObject repoJSON = JSON.getJSONObject(i);
                     String repoName, repoDesc;
@@ -85,7 +90,7 @@ public class Main2Activity extends AppCompatActivity {
             String value = ed2.getText().toString();
             getRepo gt = new getRepo();
             gt.execute(value);
-
+            ed2.setText("");
         }
     }
 
@@ -109,15 +114,37 @@ public class Main2Activity extends AppCompatActivity {
             } else if (isvalid.equals("null_internet") ) {
                 Toast.makeText(getApplicationContext(), "No Internet Connectivity", Toast.LENGTH_SHORT).show();
             } else{ //if (isvalid.equals(){
-                if (d.onAdd(isvalid)) {
-                    Toast.makeText(getApplicationContext(), isvalid + " successfully followed", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), " Failed to follow " + isvalid, Toast.LENGTH_SHORT).show();
+                ImageButton ib = (ImageButton) findViewById(R.id.follow_button);
+                String a = ib.getContentDescription().toString();
+                Log.v("onfollowbutton", a);
+                if( a.equals("following") ){
+                    Log.v("onfollowbutton if", "following  ");
+                    if ( d.delete(isvalid) ){
+                        ib.setContentDescription("follow");
+                        ib.setImageResource(R.drawable.follow);
+                        Toast.makeText(getApplicationContext(), isvalid + " Unfollowed", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "Failed unfollow request ", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                isvalid = "Wait";
+
+                else if ( a.equals("follow") ){
+                    Log.v("onfollowbutton else", "follow  ");
+                    if ( d.onAdd(isvalid) ){
+                        ib.setContentDescription("following");
+                        ib.setImageResource(R.drawable.following);
+                        Toast.makeText(getApplicationContext(), isvalid + " followed", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "Failed follow request ", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
 
         } catch ( SQLiteConstraintException e ){
+            e.printStackTrace();
+        } catch ( Exception e ){
             e.printStackTrace();
         }
     }

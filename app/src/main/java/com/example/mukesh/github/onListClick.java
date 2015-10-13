@@ -166,7 +166,13 @@ public class onListClick extends AppCompatActivity {
             }
 
             TextView head = (TextView) findViewById(R.id.head_on_list);
-            head.setText(name);
+            if (name.equals("null")){
+                head.setText("******");
+            }
+
+            else{
+                head.setText(name);
+            }
 
             TextView data = (TextView) findViewById(R.id.data_on_list);
             StringBuffer strData=new StringBuffer();
