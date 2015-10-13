@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,19 +30,51 @@ import java.net.UnknownHostException;
 public class onListClick extends AppCompatActivity {
 
     public String error=new String();
+    database d;
+    String userid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_list_click);
-
+        d = new database(getApplicationContext());
         Intent intent = getIntent();
 
         if( (intent != null) && intent.hasExtra(Intent.EXTRA_TEXT) ){
-            final String userid = intent.getStringExtra(Intent.EXTRA_TEXT);
+            userid = intent.getStringExtra(Intent.EXTRA_TEXT);
             getuserinfo gi = new getuserinfo();
             gi.execute(userid);
         }
     }
+
+    public void onfollowbutton ( View v ){
+        ImageButton ib = (ImageButton) findViewById(R.id.following_user_info);
+        String a = ib.getContentDescription().toString();
+        Log.v("onfollowbutton", a);
+        if( a.equals("following") ){
+            Log.v("onfollowbutton if", "following  ");
+            if ( d.delete(userid) ){
+                ib.setContentDescription("follow");
+                ib.setImageResource(R.drawable.follow);
+                Toast.makeText(getApplicationContext(), userid + " Unfollowed", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Failed unfollow request ", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        else if ( a.equals("follow") ){
+            Log.v("onfollowbutton else", "follow  ");
+            if ( d.onAdd(userid) ){
+                ib.setContentDescription("following");
+                ib.setImageResource(R.drawable.following);
+                Toast.makeText(getApplicationContext(), userid + " followed again", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Failed follow request ", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     public class getuserinfo extends AsyncTask<String, Void, String >{
 
@@ -166,6 +200,7 @@ public class onListClick extends AppCompatActivity {
 
     }//class getuserinfo
 
+
     public class getbitmap extends AsyncTask<String, Void, Bitmap >{
 
         public Bitmap myBitmap;
@@ -199,6 +234,19 @@ public class onListClick extends AppCompatActivity {
             super.onPostExecute(b);
         }
     }//getbitmap
+
+    @Override
+    protected void onResume() {
+        d=new database(getApplicationContext());
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        d.close();
+        super.onPause();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

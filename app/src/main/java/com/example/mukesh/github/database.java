@@ -53,4 +53,25 @@ public class database extends SQLiteOpenHelper {
         return res;
     }
 
+    public boolean update( String serialno, String userid ){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Col1, serialno);
+        contentValues.put(Col2, userid );
+        if ( db.update(Table_name, contentValues, "Serial_Number = ?", new String[] {serialno} ) == 0 ){
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean delete( String userid ){
+        SQLiteDatabase db = this.getWritableDatabase();
+        int num = db.delete(Table_name, "User_ID = ?", new String[] {userid});
+        if(num==0){
+            return false;
+        }
+        return true;
+    }
+
 }

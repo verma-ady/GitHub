@@ -37,16 +37,38 @@
 
     </LinearLayout>
 
-    <TextView
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll">
+
+
+        <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/data_on_list"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="#000000"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/ll"
         android:paddingLeft="10dp"
         android:paddingTop="20dp"
-        android:paddingBottom="15dp"/>
+        android:paddingBottom="15dp"
+        android:scrollbars="vertical"/>
+
+    </ScrollView>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/following_user_info"
+        android:layout_marginBottom="5dp"
+        android:paddingTop="5dp"
+        android:src="@drawable/following"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:contentDescription="following"
+        android:onClick="onfollowbutton" />
+
 
 </RelativeLayout>

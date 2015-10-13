@@ -32,7 +32,7 @@ public class Main2Activity extends AppCompatActivity {
 
     ArrayList<String> repoList = new ArrayList<>();
     database d;
-    String isvalid= "Wait";
+    String isvalid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,31 +102,18 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     public void addtodb( View v ){
-
-        EditText ed = (EditText)findViewById(R.id.search2);
-        String input = ed.getText().toString();
         try {
-            Log.v("Follow_func", isvalid + "" + input);
-            if (isvalid.equals(input)){
+            Log.v("Follow_func", isvalid );
+            if (isvalid.equals("null_inputstream") || isvalid.equals("null_file")) {
+                Toast.makeText(getApplicationContext(), "No Such User Id Found", Toast.LENGTH_SHORT).show();
+            } else if (isvalid.equals("null_internet") ) {
+                Toast.makeText(getApplicationContext(), "No Internet Connectivity", Toast.LENGTH_SHORT).show();
+            } else{ //if (isvalid.equals(){
                 if (d.onAdd(isvalid)) {
                     Toast.makeText(getApplicationContext(), isvalid + " successfully followed", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), " Failed to follow " + isvalid, Toast.LENGTH_SHORT).show();
                 }
-                isvalid = "Wait";
-            } else if ( isvalid.equals("Wait") ) {
-                Toast.makeText(getApplicationContext(), "Unable to fetch user data", Toast.LENGTH_SHORT).show();
-                return;
-            } else if (isvalid == "null_inputstream" || isvalid == "null_file") {
-                Toast.makeText(getApplicationContext(), "No Such User Id Found", Toast.LENGTH_SHORT).show();
-                isvalid = "Wait";
-                return;
-            } else if (isvalid == "null_internet") {
-                Toast.makeText(getApplicationContext(), "No Internet Connectivity", Toast.LENGTH_SHORT).show();
-                isvalid = "Wait";
-                return;
-            } else {
-                Toast.makeText(getApplicationContext(), "Press Search Button to search before Following", Toast.LENGTH_SHORT).show();
                 isvalid = "Wait";
             }
 
@@ -237,7 +224,7 @@ public class Main2Activity extends AppCompatActivity {
                 for ( int i=0; i<num ; i++ ){
                     JSONObject repoJSON = JSON.getJSONObject(i);
                     String repoName, repoDesc;
-                    isvalid =repoJSON.getJSONObject("owner").getString("login");
+                    isvalid = repoJSON.getJSONObject("owner").getString("login");
                     repoName = repoJSON.getString("name");
                     repoDesc = repoJSON.getString("description");
                     repoList.add(repoName );
