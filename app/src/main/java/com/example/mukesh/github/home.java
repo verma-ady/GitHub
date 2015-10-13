@@ -93,8 +93,8 @@ public class home extends Fragment {
 
     @Override
     public void onResume() {
-        super.onResume();
         showlist();
+        super.onResume();
     }
 
     public void showlist(){
@@ -103,21 +103,23 @@ public class home extends Fragment {
 
         int cnt = dbres.getCount();
         int i=0;
-        String res[] = new String[cnt];
-
-
+        String res[];
         if( cnt!=0 ) {
-            while(dbres.moveToNext()){
-                res[i++]=dbres.getString(1);
+            res = new String[cnt];
+            while(dbres.moveToNext()) {
+                res[i++] = dbres.getString(1);
             }
-            ArrayList<String> arlist = new ArrayList<>(Arrays.asList(res));
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment_home, R.id.followlist, arlist);
-            lv.setAdapter(arrayAdapter);
         }
         else {
+            res = new String[0];
             Toast.makeText(getActivity(), "Followed List Empty ", Toast.LENGTH_SHORT).show();
         }
+        ArrayList<String> arlist = new ArrayList<>(Arrays.asList(res));
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment_home, R.id.followlist, arlist);
+        lv.setAdapter(arrayAdapter);
     }
+
+
     //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {
