@@ -95,6 +95,16 @@ public class Main2Activity extends AppCompatActivity {
     public void onsearch2( View v ){
         Log.v("Main2", "onearch");
         EditText ed2= (EditText)findViewById(R.id.search2);
+        boolean b = d.isthere( ed2.getText().toString() );
+        if ( b ){
+            Log.v("onList.onfollowbutton", "found" );
+            imageButton.setImageResource(R.drawable.following);
+            imageButton.setContentDescription("following");
+        } else {
+            Log.v("onList.onfollowbutton", "not found" );
+            imageButton.setImageResource(R.drawable.follow);
+            imageButton.setContentDescription("follow");
+        }
         if(ed2.getText().length() == 0 ){
             Toast.makeText(getApplicationContext(), "Please Enter User ID", Toast.LENGTH_SHORT).show();
         }
